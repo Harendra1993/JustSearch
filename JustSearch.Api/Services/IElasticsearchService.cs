@@ -7,7 +7,7 @@ namespace JustSearch.Api.Services
 {
     public interface IElasticSearchService
     {
-        bool IndexToNestElasticsearch(IElasticClient client, IList<Items> stackResults);
+        bool IndexToNestElasticsearch(IList<Items> items);
         ResultViewModel SearchOnELK(SearchDTO searchDTO);
     }
 }
