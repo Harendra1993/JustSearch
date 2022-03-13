@@ -23,7 +23,7 @@ namespace JustSearch.Api.Services
         /// <returns></returns>
         public bool IndexToNestElasticsearch(IList<Items> items)
         {
-            var indexResponse = _client.IndexMany<Items>(items, "just-index");
+            var indexResponse = _client.IndexMany<Items>(items, "just-items");
 
             bool _indexResponse = indexResponse.IsValid;
             if (indexResponse.Errors)
@@ -40,11 +40,16 @@ namespace JustSearch.Api.Services
 
         public ResultViewModel SearchOnELK(SearchDTO searchDTO)
         {
+
             ISearchResponse<Items> result = _client.Search<Items>(s => s
-                                    .Index("just-index")
-                                    .Query(q => q.MatchAll()
-                                           )
-                                     );
+                                                                    .Index("just-items")
+                                                                    .Query(q => 
+                                                                        q.MultiMatch(c => c
+                                                                            .Fields(f => f.Field(p => p.Title).Field(p=>p.Description).Field(p => p.Link))
+                                                                            .Query("hello")
+                                                                        )
+                                                                    )
+                                                                 );
 
             List<Items> documents = result.Documents.ToList();
 
